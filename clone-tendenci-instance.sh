@@ -49,6 +49,12 @@ rm -rf $env_path_dev
 rsync -a $env_path_prod/ $env_path_dev
 if ! [ 0 -eq $? ]; then echo "$env_path_dev wasn't created."; exit 1; fi
 
+find $env_path_dev -name '*.pyc' -delete
+# Hacky equivalent of virtualenv --relocable, but actually works for my use case
+for file_path in $(grep -l -r "$env_path_prod" $env_path_dev); do
+	sed -i -e "s|$env_path_prod|$env_path_dev|g" $file_path
+done
+
 # Copy site files
 rm -rf $website_path_dev
 rsync -a $website_path_prod/ $website_path_dev
