@@ -70,7 +70,7 @@ su -c "createdb --owner=tendenci $db_name_dev" postgres
 su -c "pg_dump $db_name_prod | psql --quiet -o /dev/null $db_name_dev" postgres
 if ! [ 0 -eq $? ]; then echo "$db_name_dev wasn't created."; exit 1; fi
 
-# Update settings which should not match
+# Delete settings which should not match
 sed -i -e "/^DATABASES.*$db_name_prod.*/d" $website_path_dev/conf/settings.py
 sed -i -e '/^SECRET_KEY.*/d' $website_path_dev/conf/settings.py
 sed -i -e '/^SITE_SETTINGS_KEY.*/d' $website_path_dev/conf/settings.py
@@ -88,6 +88,8 @@ SITE_CACHE_KEY = ''
 CACHE_PRE_KEY = SITE_CACHE_KEY
 set_app_log_filename('/srv/tendenci/logs/dev-app.log')
 set_debug_log_filename('/srv/tendenci/logs/dev-debug.log')
+# Populate with required domains if encountering 403's on login
+# CSRF_TRUSTED_ORIGINS = []
 EOT
 
 # Make and run migrations in dev environment 
