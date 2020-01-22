@@ -92,7 +92,3 @@ set_debug_log_filename('/srv/tendenci/logs/dev-debug.log')
 # CSRF_TRUSTED_ORIGINS = []
 EOT
 
-# Make and run migrations in dev environment 
-$env_path_dev/bin/python $website_path_dev/manage.py makemigrations --noinput
-$env_path_dev/bin/python $website_path_dev/manage.py migrate --noinput
-
